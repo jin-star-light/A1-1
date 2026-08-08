@@ -51,5 +51,40 @@ class ConsoleMenuTests(unittest.TestCase):
         self.assertEqual(output[-1], "프로그램을 종료합니다.")
 
 
+class AddPromptTests(unittest.TestCase):
+    def test_add_prompt_retries_blank_fields_and_appends_prompt(self):
+        import main
+
+        prompt_list = []
+        answers = iter(["   ", "회의록 요약", "", "회의 내용을 요약해주세요.", "1"])
+        output = []
+
+        main.add_prompt(prompt_list, lambda _message: next(answers), output.append)
+
+        self.assertEqual(
+            prompt_list,
+            [
+                {
+                    "title": "회의록 요약",
+                    "content": "회의 내용을 요약해주세요.",
+                    "category": "텍스트 생성",
+                    "favorite": False,
+                }
+            ],
+        )
+        self.assertEqual(output.count("입력값은 비워둘 수 없습니다."), 2)
+        self.assertEqual(output[-1], "프롬프트가 추가되었습니다!")
+
+    def test_add_prompt_accepts_a_custom_category(self):
+        import main
+
+        prompt_list = []
+        answers = iter(["제목", "내용", "0", "나만의 분류"])
+
+        main.add_prompt(prompt_list, lambda _message: next(answers), lambda _line: None)
+
+        self.assertEqual(prompt_list[0]["category"], "나만의 분류")
+
+
 if __name__ == "__main__":
     unittest.main()

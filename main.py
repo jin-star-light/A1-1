@@ -63,6 +63,49 @@ def show_menu(output_func=print):
         output_func(line)
 
 
+def read_required(message, input_func, output_func):
+    """공백이 아닌 값이 입력될 때까지 요청한다."""
+    while True:
+        value = input_func(message).strip()
+        if value:
+            return value
+        output_func("입력값은 비워둘 수 없습니다.")
+
+
+def choose_category(input_func, output_func):
+    """기본 목록 또는 직접 입력으로 카테고리를 선택한다."""
+    while True:
+        output_func("\n카테고리 선택:")
+        for index, category in enumerate(CATEGORIES, start=1):
+            output_func(f"{index}) {category}")
+        output_func("0) 직접 입력")
+
+        choice = input_func("선택: ").strip()
+        if choice == "0":
+            return read_required("카테고리: ", input_func, output_func)
+        if choice.isdigit() and 1 <= int(choice) <= len(CATEGORIES):
+            return CATEGORIES[int(choice) - 1]
+        output_func("올바른 카테고리 번호를 입력해주세요.")
+
+
+def add_prompt(prompt_list, input_func=input, output_func=print):
+    """새 프롬프트를 목록에 추가한다."""
+    output_func("\n=== 프롬프트 추가 ===")
+    title = read_required("제목: ", input_func, output_func)
+    content = read_required("내용: ", input_func, output_func)
+    category = choose_category(input_func, output_func)
+
+    prompt_list.append(
+        {
+            "title": title,
+            "content": content,
+            "category": category,
+            "favorite": False,
+        }
+    )
+    output_func("프롬프트가 추가되었습니다!")
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -75,6 +118,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
         if choice == "0":
             output_func("프로그램을 종료합니다.")
             break
+
+        if choice == "1":
+            add_prompt(prompt_list, input_func, output_func)
+            continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")
 
