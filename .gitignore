@@ -4,6 +4,7 @@ checklist.md
 
 # Local submission screenshots containing machine-specific paths
 images/git-log.png
+images/기능 완성 후 커밋하고 main 브랜치로 병합한다. (checkout, merge).png
 
 # Python cache files
 __pycache__/
