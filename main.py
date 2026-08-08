@@ -106,6 +106,12 @@ def add_prompt(prompt_list, input_func=input, output_func=print):
     output_func("프롬프트가 추가되었습니다!")
 
 
+def format_prompt_summary(index, prompt):
+    """목록 화면에서 공통으로 사용하는 한 줄 요약을 반환한다."""
+    favorite = " ⭐" if prompt["favorite"] else ""
+    return f"{index}. [{prompt['category']}] {prompt['title']}{favorite}"
+
+
 def show_list(prompt_list, output_func=print):
     """저장된 모든 프롬프트의 요약 목록을 출력한다."""
     output_func("\n=== 프롬프트 목록 ===")
@@ -114,10 +120,7 @@ def show_list(prompt_list, output_func=print):
         return
 
     for index, prompt in enumerate(prompt_list, start=1):
-        favorite = " ⭐" if prompt["favorite"] else ""
-        output_func(
-            f"{index}. [{prompt['category']}] {prompt['title']}{favorite}"
-        )
+        output_func(format_prompt_summary(index, prompt))
     output_func(f"\n총 {len(prompt_list)}개의 프롬프트")
 
 
@@ -157,10 +160,7 @@ def search_prompt(prompt_list, input_func=input, output_func=print):
 
     output_func("\n검색 결과:")
     for index, prompt in enumerate(matches, start=1):
-        favorite = " ⭐" if prompt["favorite"] else ""
-        output_func(
-            f"{index}. [{prompt['category']}] {prompt['title']}{favorite}"
-        )
+        output_func(format_prompt_summary(index, prompt))
     output_func(f"\n{len(matches)}개의 프롬프트를 찾았습니다.")
 
 
@@ -224,7 +224,7 @@ def show_favorites(prompt_list, output_func=print):
         return
 
     for index, prompt in enumerate(favorites, start=1):
-        output_func(f"{index}. [{prompt['category']}] {prompt['title']} ⭐")
+        output_func(format_prompt_summary(index, prompt))
     output_func(f"\n총 {len(favorites)}개의 즐겨찾기")
 
 
