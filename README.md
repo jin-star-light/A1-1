@@ -81,6 +81,10 @@ python -m unittest discover -s tests -v
 
 ![Python Extension](images/python-extention.png)
 
+### Git 설정
+
+![Git 사용자 정보와 기본 브랜치 설정](images/git-설정.png)
+
 ## 프로그램 실행 화면
 
 ### 프롬프트 추가
