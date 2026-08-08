@@ -83,4 +83,4 @@ python -m unittest discover -s tests -v
 
 ## GitHub 저장소
 
-원격 GitHub 저장소를 연결한 후 저장소 URL을 이 위치에 추가합니다.
+[https://github.com/jin-star-light/A1-1](https://github.com/jin-star-light/A1-1)
