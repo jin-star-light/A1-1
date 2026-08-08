@@ -130,5 +130,41 @@ class PromptListTests(unittest.TestCase):
         )
 
 
+class CategoryFilterTests(unittest.TestCase):
+    def test_show_by_category_displays_only_matching_prompts(self):
+        import main
+
+        prompt_list = [
+            {
+                "title": "텍스트 도우미",
+                "content": "내용",
+                "category": "텍스트 생성",
+                "favorite": True,
+            },
+            {
+                "title": "이미지 도우미",
+                "content": "내용",
+                "category": "이미지 생성",
+                "favorite": False,
+            },
+        ]
+        output = []
+
+        main.show_by_category(prompt_list, lambda _message: "1", output.append)
+
+        self.assertIn("\n[텍스트 생성] 카테고리 프롬프트:", output)
+        self.assertIn("1. 텍스트 도우미 ⭐", output)
+        self.assertNotIn("이미지 도우미", "\n".join(output))
+        self.assertEqual(output[-1], "\n총 1개의 프롬프트")
+
+    def test_show_by_category_explains_when_no_matches_exist(self):
+        import main
+
+        output = []
+        main.show_by_category([], lambda _message: "6", output.append)
+
+        self.assertEqual(output[-1], "해당 카테고리에 등록된 프롬프트가 없습니다.")
+
+
 if __name__ == "__main__":
     unittest.main()

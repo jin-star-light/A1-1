@@ -121,6 +121,25 @@ def show_list(prompt_list, output_func=print):
     output_func(f"\n총 {len(prompt_list)}개의 프롬프트")
 
 
+def show_by_category(prompt_list, input_func=input, output_func=print):
+    """선택한 카테고리의 프롬프트만 출력한다."""
+    output_func("\n=== 카테고리별 조회 ===")
+    category = choose_category(input_func, output_func)
+    matches = [
+        prompt for prompt in prompt_list if prompt["category"] == category
+    ]
+
+    output_func(f"\n[{category}] 카테고리 프롬프트:")
+    if not matches:
+        output_func("해당 카테고리에 등록된 프롬프트가 없습니다.")
+        return
+
+    for index, prompt in enumerate(matches, start=1):
+        favorite = " ⭐" if prompt["favorite"] else ""
+        output_func(f"{index}. {prompt['title']}{favorite}")
+    output_func(f"\n총 {len(matches)}개의 프롬프트")
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -140,6 +159,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
 
         if choice == "2":
             show_list(prompt_list, output_func)
+            continue
+
+        if choice == "3":
+            show_by_category(prompt_list, input_func, output_func)
             continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")
