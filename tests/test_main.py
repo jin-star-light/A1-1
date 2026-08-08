@@ -208,5 +208,36 @@ class PromptSearchTests(unittest.TestCase):
         self.assertEqual(output[-1], "검색 결과가 없습니다.")
 
 
+class PromptDetailTests(unittest.TestCase):
+    def test_show_detail_displays_every_prompt_field(self):
+        import main
+
+        prompt_list = [
+            {
+                "title": "상세 프롬프트",
+                "content": "전체 내용입니다.",
+                "category": "페르소나",
+                "favorite": True,
+            }
+        ]
+        output = []
+
+        main.show_detail(prompt_list, lambda _message: "1", output.append)
+
+        rendered = "\n".join(output)
+        self.assertIn("제목: 상세 프롬프트", rendered)
+        self.assertIn("카테고리: 페르소나", rendered)
+        self.assertIn("즐겨찾기: ⭐", rendered)
+        self.assertIn("내용:\n전체 내용입니다.", rendered)
+
+    def test_show_detail_rejects_an_invalid_number(self):
+        import main
+
+        output = []
+        main.show_detail([], lambda _message: "잘못된 값", output.append)
+
+        self.assertEqual(output[-1], "올바른 프롬프트 번호를 입력해주세요.")
+
+
 if __name__ == "__main__":
     unittest.main()

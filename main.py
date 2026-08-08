@@ -164,6 +164,38 @@ def search_prompt(prompt_list, input_func=input, output_func=print):
     output_func(f"\n{len(matches)}개의 프롬프트를 찾았습니다.")
 
 
+def get_prompt_by_number(prompt_list, value, output_func):
+    """1부터 시작하는 번호를 실제 프롬프트로 변환한다."""
+    if not value.isdigit():
+        output_func("올바른 프롬프트 번호를 입력해주세요.")
+        return None
+
+    index = int(value) - 1
+    if not 0 <= index < len(prompt_list):
+        output_func("올바른 프롬프트 번호를 입력해주세요.")
+        return None
+    return prompt_list[index]
+
+
+def show_detail(prompt_list, input_func=input, output_func=print):
+    """선택한 프롬프트의 전체 내용을 출력한다."""
+    output_func("\n=== 프롬프트 상세 보기 ===")
+    value = input_func("번호 입력: ").strip()
+    prompt = get_prompt_by_number(prompt_list, value, output_func)
+    if prompt is None:
+        return
+
+    favorite = "⭐" if prompt["favorite"] else "아니오"
+    output_func("─" * 28)
+    output_func(f"제목: {prompt['title']}")
+    output_func(f"카테고리: {prompt['category']}")
+    output_func(f"즐겨찾기: {favorite}")
+    output_func("─" * 28)
+    output_func("내용:")
+    output_func(prompt["content"])
+    output_func("─" * 28)
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -191,6 +223,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
 
         if choice == "4":
             search_prompt(prompt_list, input_func, output_func)
+            continue
+
+        if choice == "5":
+            show_detail(prompt_list, input_func, output_func)
             continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")
