@@ -86,5 +86,49 @@ class AddPromptTests(unittest.TestCase):
         self.assertEqual(prompt_list[0]["category"], "나만의 분류")
 
 
+class PromptListTests(unittest.TestCase):
+    def test_show_list_displays_number_category_title_and_favorite(self):
+        import main
+
+        prompt_list = [
+            {
+                "title": "첫 번째",
+                "content": "내용",
+                "category": "텍스트 생성",
+                "favorite": True,
+            },
+            {
+                "title": "두 번째",
+                "content": "내용",
+                "category": "이미지 생성",
+                "favorite": False,
+            },
+        ]
+        output = []
+
+        main.show_list(prompt_list, output.append)
+
+        self.assertEqual(
+            output,
+            [
+                "\n=== 프롬프트 목록 ===",
+                "1. [텍스트 생성] 첫 번째 ⭐",
+                "2. [이미지 생성] 두 번째",
+                "\n총 2개의 프롬프트",
+            ],
+        )
+
+    def test_show_list_explains_when_no_prompts_exist(self):
+        import main
+
+        output = []
+        main.show_list([], output.append)
+
+        self.assertEqual(
+            output,
+            ["\n=== 프롬프트 목록 ===", "저장된 프롬프트가 없습니다."],
+        )
+
+
 if __name__ == "__main__":
     unittest.main()
