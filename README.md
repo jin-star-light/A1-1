@@ -71,6 +71,16 @@ python -m unittest discover -s tests -v
 └── README.md
 ```
 
+## 개발 환경 스크린샷
+
+### Korean Language Pack
+
+![Korean Language Pack](images/korean-pack.png)
+
+### Python Extension
+
+![Python Extension](images/python-extention.png)
+
 ## GitHub 저장소
 
 원격 GitHub 저장소를 연결한 후 저장소 URL을 이 위치에 추가합니다.
