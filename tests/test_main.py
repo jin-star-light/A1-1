@@ -166,5 +166,47 @@ class CategoryFilterTests(unittest.TestCase):
         self.assertEqual(output[-1], "해당 카테고리에 등록된 프롬프트가 없습니다.")
 
 
+class PromptSearchTests(unittest.TestCase):
+    def test_search_prompt_matches_title_or_content_case_insensitively(self):
+        import main
+
+        prompt_list = [
+            {
+                "title": "Blog Helper",
+                "content": "SEO 글쓰기",
+                "category": "텍스트 생성",
+                "favorite": True,
+            },
+            {
+                "title": "업무 도우미",
+                "content": "BLOG 초안 검토",
+                "category": "자동화",
+                "favorite": False,
+            },
+            {
+                "title": "이미지 도우미",
+                "content": "썸네일 생성",
+                "category": "이미지 생성",
+                "favorite": False,
+            },
+        ]
+        output = []
+
+        main.search_prompt(prompt_list, lambda _message: "  blog  ", output.append)
+
+        self.assertIn("1. [텍스트 생성] Blog Helper ⭐", output)
+        self.assertIn("2. [자동화] 업무 도우미", output)
+        self.assertNotIn("이미지 도우미", "\n".join(output))
+        self.assertEqual(output[-1], "\n2개의 프롬프트를 찾았습니다.")
+
+    def test_search_prompt_explains_when_no_matches_exist(self):
+        import main
+
+        output = []
+        main.search_prompt([], lambda _message: "없는 검색어", output.append)
+
+        self.assertEqual(output[-1], "검색 결과가 없습니다.")
+
+
 if __name__ == "__main__":
     unittest.main()

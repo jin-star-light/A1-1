@@ -140,6 +140,30 @@ def show_by_category(prompt_list, input_func=input, output_func=print):
     output_func(f"\n총 {len(matches)}개의 프롬프트")
 
 
+def search_prompt(prompt_list, input_func=input, output_func=print):
+    """제목 또는 내용에서 키워드와 일치하는 프롬프트를 출력한다."""
+    output_func("\n=== 프롬프트 검색 ===")
+    keyword = read_required("검색어: ", input_func, output_func).casefold()
+    matches = [
+        prompt
+        for prompt in prompt_list
+        if keyword in prompt["title"].casefold()
+        or keyword in prompt["content"].casefold()
+    ]
+
+    if not matches:
+        output_func("검색 결과가 없습니다.")
+        return
+
+    output_func("\n검색 결과:")
+    for index, prompt in enumerate(matches, start=1):
+        favorite = " ⭐" if prompt["favorite"] else ""
+        output_func(
+            f"{index}. [{prompt['category']}] {prompt['title']}{favorite}"
+        )
+    output_func(f"\n{len(matches)}개의 프롬프트를 찾았습니다.")
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -163,6 +187,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
 
         if choice == "3":
             show_by_category(prompt_list, input_func, output_func)
+            continue
+
+        if choice == "4":
+            search_prompt(prompt_list, input_func, output_func)
             continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")
