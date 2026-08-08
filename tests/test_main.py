@@ -309,5 +309,44 @@ class FavoriteListTests(unittest.TestCase):
         self.assertEqual(output[-1], "즐겨찾기된 프롬프트가 없습니다.")
 
 
+class FullConsoleWorkflowTests(unittest.TestCase):
+    def test_menu_dispatch_keeps_added_and_favorite_state_until_exit(self):
+        import main
+
+        prompt_list = []
+        answers = iter(
+            [
+                "1",
+                "새 프롬프트",
+                "새 내용",
+                "1",
+                "2",
+                "6",
+                "1",
+                "7",
+                "3",
+                "1",
+                "4",
+                "새 프롬프트",
+                "5",
+                "1",
+                "0",
+            ]
+        )
+        output = []
+
+        main.main(prompt_list, lambda _message: next(answers), output.append)
+
+        self.assertEqual(len(prompt_list), 1)
+        self.assertTrue(prompt_list[0]["favorite"])
+        rendered = "\n".join(output)
+        self.assertIn("=== 프롬프트 목록 ===", rendered)
+        self.assertIn("=== 즐겨찾기 목록 ===", rendered)
+        self.assertIn("[텍스트 생성] 카테고리 프롬프트:", rendered)
+        self.assertIn("1개의 프롬프트를 찾았습니다.", rendered)
+        self.assertIn("내용:\n새 내용", rendered)
+        self.assertEqual(output[-1], "프로그램을 종료합니다.")
+
+
 if __name__ == "__main__":
     unittest.main()
