@@ -196,6 +196,25 @@ def show_detail(prompt_list, input_func=input, output_func=print):
     output_func("─" * 28)
 
 
+def toggle_favorite(prompt_list, input_func=input, output_func=print):
+    """선택한 프롬프트의 즐겨찾기 상태를 반전한다."""
+    output_func("\n=== 즐겨찾기 관리 ===")
+    value = input_func("프롬프트 번호 입력: ").strip()
+    prompt = get_prompt_by_number(prompt_list, value, output_func)
+    if prompt is None:
+        return
+
+    prompt["favorite"] = not prompt["favorite"]
+    if prompt["favorite"]:
+        output_func(
+            f"'{prompt['title']}' 프롬프트를 즐겨찾기에 추가했습니다!"
+        )
+    else:
+        output_func(
+            f"'{prompt['title']}' 프롬프트를 즐겨찾기에서 해제했습니다!"
+        )
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -227,6 +246,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
 
         if choice == "5":
             show_detail(prompt_list, input_func, output_func)
+            continue
+
+        if choice == "6":
+            toggle_favorite(prompt_list, input_func, output_func)
             continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")

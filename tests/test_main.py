@@ -239,5 +239,40 @@ class PromptDetailTests(unittest.TestCase):
         self.assertEqual(output[-1], "올바른 프롬프트 번호를 입력해주세요.")
 
 
+class FavoriteToggleTests(unittest.TestCase):
+    def test_toggle_favorite_adds_and_then_removes_favorite(self):
+        import main
+
+        prompt_list = [
+            {
+                "title": "즐겨찾기 대상",
+                "content": "내용",
+                "category": "기타",
+                "favorite": False,
+            }
+        ]
+        output = []
+
+        main.toggle_favorite(prompt_list, lambda _message: "1", output.append)
+        self.assertTrue(prompt_list[0]["favorite"])
+        self.assertEqual(
+            output[-1], "'즐겨찾기 대상' 프롬프트를 즐겨찾기에 추가했습니다!"
+        )
+
+        main.toggle_favorite(prompt_list, lambda _message: "1", output.append)
+        self.assertFalse(prompt_list[0]["favorite"])
+        self.assertEqual(
+            output[-1], "'즐겨찾기 대상' 프롬프트를 즐겨찾기에서 해제했습니다!"
+        )
+
+    def test_toggle_favorite_rejects_out_of_range_number(self):
+        import main
+
+        output = []
+        main.toggle_favorite([], lambda _message: "1", output.append)
+
+        self.assertEqual(output[-1], "올바른 프롬프트 번호를 입력해주세요.")
+
+
 if __name__ == "__main__":
     unittest.main()
