@@ -85,6 +85,19 @@ class AddPromptTests(unittest.TestCase):
 
         self.assertEqual(prompt_list[0]["category"], "나만의 분류")
 
+    def test_choose_category_retries_unicode_digit_that_int_rejects(self):
+        import main
+
+        answers = iter(["²", "1"])
+        output = []
+
+        category = main.choose_category(
+            lambda _message: next(answers), output.append
+        )
+
+        self.assertEqual(category, "텍스트 생성")
+        self.assertIn("올바른 카테고리 번호를 입력해주세요.", output)
+
 
 class PromptListTests(unittest.TestCase):
     def test_show_list_displays_number_category_title_and_favorite(self):
@@ -235,6 +248,14 @@ class PromptDetailTests(unittest.TestCase):
 
         output = []
         main.show_detail([], lambda _message: "잘못된 값", output.append)
+
+        self.assertEqual(output[-1], "올바른 프롬프트 번호를 입력해주세요.")
+
+    def test_show_detail_rejects_unicode_digit_that_int_rejects(self):
+        import main
+
+        output = []
+        main.show_detail([], lambda _message: "²", output.append)
 
         self.assertEqual(output[-1], "올바른 프롬프트 번호를 입력해주세요.")
 

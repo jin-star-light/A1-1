@@ -72,6 +72,14 @@ def read_required(message, input_func, output_func):
         output_func("입력값은 비워둘 수 없습니다.")
 
 
+def parse_integer(value):
+    """정수로 변환할 수 없는 입력에는 None을 반환한다."""
+    try:
+        return int(value)
+    except ValueError:
+        return None
+
+
 def choose_category(input_func, output_func):
     """기본 목록 또는 직접 입력으로 카테고리를 선택한다."""
     while True:
@@ -83,8 +91,12 @@ def choose_category(input_func, output_func):
         choice = input_func("선택: ").strip()
         if choice == "0":
             return read_required("카테고리: ", input_func, output_func)
-        if choice.isdigit() and 1 <= int(choice) <= len(CATEGORIES):
-            return CATEGORIES[int(choice) - 1]
+        category_number = parse_integer(choice)
+        if (
+            category_number is not None
+            and 1 <= category_number <= len(CATEGORIES)
+        ):
+            return CATEGORIES[category_number - 1]
         output_func("올바른 카테고리 번호를 입력해주세요.")
 
 
@@ -166,11 +178,12 @@ def search_prompt(prompt_list, input_func=input, output_func=print):
 
 def get_prompt_by_number(prompt_list, value, output_func):
     """1부터 시작하는 번호를 실제 프롬프트로 변환한다."""
-    if not value.isdigit():
+    prompt_number = parse_integer(value)
+    if prompt_number is None:
         output_func("올바른 프롬프트 번호를 입력해주세요.")
         return None
 
-    index = int(value) - 1
+    index = prompt_number - 1
     if not 0 <= index < len(prompt_list):
         output_func("올바른 프롬프트 번호를 입력해주세요.")
         return None
