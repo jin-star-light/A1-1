@@ -1,0 +1,7 @@
+# Local planning and assignment references
+subject.md
+checklist.md
+
+# Python cache files
+__pycache__/
+*.py[cod]
