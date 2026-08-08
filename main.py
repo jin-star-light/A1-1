@@ -215,6 +215,19 @@ def toggle_favorite(prompt_list, input_func=input, output_func=print):
         )
 
 
+def show_favorites(prompt_list, output_func=print):
+    """즐겨찾기된 프롬프트의 요약 목록만 출력한다."""
+    output_func("\n=== 즐겨찾기 목록 ===")
+    favorites = [prompt for prompt in prompt_list if prompt["favorite"]]
+    if not favorites:
+        output_func("즐겨찾기된 프롬프트가 없습니다.")
+        return
+
+    for index, prompt in enumerate(favorites, start=1):
+        output_func(f"{index}. [{prompt['category']}] {prompt['title']} ⭐")
+    output_func(f"\n총 {len(favorites)}개의 즐겨찾기")
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -250,6 +263,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
 
         if choice == "6":
             toggle_favorite(prompt_list, input_func, output_func)
+            continue
+
+        if choice == "7":
+            show_favorites(prompt_list, output_func)
             continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")

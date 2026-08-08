@@ -274,5 +274,40 @@ class FavoriteToggleTests(unittest.TestCase):
         self.assertEqual(output[-1], "올바른 프롬프트 번호를 입력해주세요.")
 
 
+class FavoriteListTests(unittest.TestCase):
+    def test_show_favorites_displays_only_favorite_prompts(self):
+        import main
+
+        prompt_list = [
+            {
+                "title": "선택됨",
+                "content": "내용",
+                "category": "자동화",
+                "favorite": True,
+            },
+            {
+                "title": "선택 안 됨",
+                "content": "내용",
+                "category": "기타",
+                "favorite": False,
+            },
+        ]
+        output = []
+
+        main.show_favorites(prompt_list, output.append)
+
+        self.assertIn("1. [자동화] 선택됨 ⭐", output)
+        self.assertNotIn("선택 안 됨", "\n".join(output))
+        self.assertEqual(output[-1], "\n총 1개의 즐겨찾기")
+
+    def test_show_favorites_explains_when_no_favorites_exist(self):
+        import main
+
+        output = []
+        main.show_favorites([], output.append)
+
+        self.assertEqual(output[-1], "즐겨찾기된 프롬프트가 없습니다.")
+
+
 if __name__ == "__main__":
     unittest.main()
