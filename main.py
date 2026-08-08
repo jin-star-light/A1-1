@@ -106,6 +106,21 @@ def add_prompt(prompt_list, input_func=input, output_func=print):
     output_func("프롬프트가 추가되었습니다!")
 
 
+def show_list(prompt_list, output_func=print):
+    """저장된 모든 프롬프트의 요약 목록을 출력한다."""
+    output_func("\n=== 프롬프트 목록 ===")
+    if not prompt_list:
+        output_func("저장된 프롬프트가 없습니다.")
+        return
+
+    for index, prompt in enumerate(prompt_list, start=1):
+        favorite = " ⭐" if prompt["favorite"] else ""
+        output_func(
+            f"{index}. [{prompt['category']}] {prompt['title']}{favorite}"
+        )
+    output_func(f"\n총 {len(prompt_list)}개의 프롬프트")
+
+
 def main(prompt_list=None, input_func=input, output_func=print):
     """메뉴 선택을 반복 처리한다."""
     if prompt_list is None:
@@ -121,6 +136,10 @@ def main(prompt_list=None, input_func=input, output_func=print):
 
         if choice == "1":
             add_prompt(prompt_list, input_func, output_func)
+            continue
+
+        if choice == "2":
+            show_list(prompt_list, output_func)
             continue
 
         output_func("잘못된 선택입니다. 메뉴 번호를 다시 입력해주세요.")
