@@ -2,6 +2,9 @@
 subject.md
 checklist.md
 
+# Local submission screenshots containing machine-specific paths
+images/git-log.png
+
 # Python cache files
 __pycache__/
 *.py[cod]
